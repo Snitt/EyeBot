@@ -1,0 +1,25 @@
+{
+  "name": "EyeBot",
+  "version": "1.0.0",
+  "description": "The Eye is being built to be an AIO (All In One) Bot. Whether you are looking for some fun, or looking for Moderation features - I hope The Eye can help you and provide said features.",
+  "main": "index.js",
+  "dependencies": {
+    "discord.js": "^11.1.0",
+    "mysql": "^2.13.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OSCAR-WOS/EyeBot.git"
+  },
+  "keywords": [],
+  "author": "OSCAR__WOS__ <theoscar@protonmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OSCAR-WOS/EyeBot/issues"
+  },
+  "homepage": "https://github.com/OSCAR-WOS/EyeBot#readme"
+}
