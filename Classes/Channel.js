@@ -1,6 +1,7 @@
 class Channel {
-  constructor (id) {
+  constructor (id, guild) {
     this.id = id
+    this.guild = guild
   }
 }
 
