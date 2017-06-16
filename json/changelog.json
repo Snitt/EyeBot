@@ -1,0 +1,71 @@
+{
+	"3.0.13" : {
+		"description"	: "Added mute [s, g]",
+		"date"			: "6/12/2017"
+	},
+
+	"3.0.12" : {
+		"description"	: "Added anime",
+		"date"			: "6/10/2017"
+	},
+
+	"3.0.11" : {
+		"description"	: "Added cat, catfact, dog, dogfact",
+		"date"			: "6/9/2017"
+	},
+
+	"3.0.10" : {
+		"description"	: "Added prefix",
+		"date"			: "6/8/2017"
+	},
+
+	"3.0.9" : {
+		"description"	: "Added twitch [info]",
+		"date"			: "6/8/2017"
+	},
+
+	"3.0.8" : {
+		"description"	: "Added trump",
+		"date"			: "6/8/2017"
+	},
+
+	"3.0.7" : {
+		"description"	: "Added shorten",
+		"date"			: "6/7/2017"
+	},
+
+	"3.0.6" : {
+		"description"	: "Added userinfo",
+		"date"			: "6/7/2017"
+	},
+
+	"3.0.5" : {
+		"description"	: "Added twitch [defaultchannel]",
+		"date"			: "6/7/2017"
+	},
+
+	"3.0.4" : {
+		"description"	: "Added twitch [followage]",
+		"date"			: "6/7/2017"
+	},
+
+	"3.0.3" : {
+		"description"	: "Added join (Support Server Made)",
+		"date"			: "6/7/2017"
+	},
+
+	"3.0.2" : {
+		"description"	: "Added kick",
+		"date"			: "6/6/2017"
+	},
+
+	"3.0.1" : {
+		"description"	: "Added purge",
+		"date"			: "6/5/2017"
+	},
+
+	"3.0.0" : {
+		"description"	: "Major Overhaul, Added (help, info, invite, purge, setprefix, specs, status, wordfilter)",
+		"date"			: "6/4/2017"
+	}
+}

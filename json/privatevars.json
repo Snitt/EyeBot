@@ -1,0 +1,16 @@
+{
+	"version"	: "3.0.13",
+	"bot_token"	: "",
+	"twitch_token"	: "",
+	"google_token"	: "",
+	"discordbots_token"		: "",
+	"owner"			: "",
+	"default_delete": 5000,
+	"database_host"	: "",
+	"database_user"	: "",
+	"database_pass"	: "",
+	"default_prefix": "!",
+	"default_points_min"	: 1,
+	"default_points_max"	: 5,
+	"default_points_timeout": 30
+}
