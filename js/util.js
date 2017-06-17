@@ -42,7 +42,7 @@ async function start () {
     for (let i = 0; i < results.length; i++) {
       data.data.guilds[results[i].guildid] = new Guild(results[i].id, results[i].owner, results[i].prefix, results[i].points_min, results[i].points_max, results[i].points_timeout)
 
-      if (results[i].twitch_defaultchannel) data.data.guilds[results[i].guildid].twitch(results[i].twitch_defaultchannel)
+      if (results[i].twitch_defaultchannel) { data.data.guilds[results[i].guildid].twitch = results[i].twitch_defaultchannel }
     }
   })
   .catch((error) => logError('util', error))
@@ -76,12 +76,23 @@ async function start () {
   index.client.login(config.bot.token)
 }
 
+function fetchMembers (guild) {
+  return new Promise((resolve, reject) => {
+    guild.fetchMembers()
+    .then((newGuild) => resolve(newGuild))
+    .catch((newGuild) => reject(newGuild))
+  })
+}
+
 function logError (source, error) {
+  console.log(`There was an error in: ${source}\n${error}`)
+
   sql.query(`INSERT INTO \`errors\` VALUES (0, ?, ?, ?)`, [source, error.message, new Date().getTime()])
   .catch((error) => `Error Writing An Error! \n${error}`)
 }
 
 module.exports = {
   start: start,
+  fetchMembers: fetchMembers,
   logError: logError
 }
