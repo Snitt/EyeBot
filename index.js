@@ -5,5 +5,5 @@ module.exports = {
   client: client
 }
 
-require('./js/eventLoader')(client)
 require('./js/util').start()
+require('./js/eventLoader')(client)

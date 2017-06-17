@@ -5,6 +5,7 @@ module.exports = (client) => {
 
   client.on('channelCreate', requestEvent('channelCreate'))
   client.on('guildCreate', requestEvent('guildCreate'))
+  client.on('guildMemberAdd', requestEvent('guildMemberAdd'))
 
   client.on('disconnect', requestEvent('disconnect'))
   client.on('message', requestEvent('message'))
