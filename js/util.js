@@ -14,23 +14,27 @@ async function start () {
   \`guildid\` VARCHAR(32) NOT NULL, \`owner\` INT NOT NULL, \`prefix\` VARCHAR(16) NOT NULL,
   \`points_min\` INT NOT NULL, \`points_max\` INT NOT NULL, \`points_timeout\` INT NOT NULL,
   \`twitch_defaultchannel\` VARCHAR(64) NOT NULL, PRIMARY KEY (\`id\`));`)
-  .catch((error) => console.log(error))
+  .catch((error) => logError('util', error))
 
   await sql.query(`CREATE TABLE IF NOT EXISTS \`users\` (\`id\` INT NOT NULL AUTO_INCREMENT,
   \`userid\` VARCHAR(32) NOT NULL, PRIMARY KEY (\`id\`));`)
-  .catch((error) => console.log(error))
+  .catch((error) => logError('util', error))
 
   await sql.query(`CREATE TABLE IF NOT EXISTS \`channels\` (\`id\` INT NOT NULL AUTO_INCREMENT,
   \`channelid\` VARCHAR(32) NOT NULL, \`guild\` INT NOT NULL, PRIMARY KEY (\`id\`));`)
-  .catch((error) => console.log(error))
+  .catch((error) => logError('util', error))
 
   await sql.query(`CREATE TABLE IF NOT EXISTS \`userguilds\` (\`id\` INT NOT NULL AUTO_INCREMENT,
   \`user\` INT NOT NULL, \`guild\` INT NOT NULL, \`points\` INT NOT NULL, PRIMARY KEY (\`id\`));`)
-  .catch((error) => console.log(error))
+  .catch((error) => logError('util', error))
 
-  await sql.query(`CREATE TABLE IF NOT EXISTS \`wordfilter\` (\`id\` INT NOT NULL AUTO_INCREMENT,
+  await sql.query(`CREATE TABLE IF NOT EXISTS \`wordfilters\` (\`id\` INT NOT NULL AUTO_INCREMENT,
   \`guild\` INT NOT NULL, \`phrase\` VARCHAR(64) NOT NULL, PRIMARY KEY (\`id\`));`)
-  .catch((error) => console.log(error))
+  .catch((error) => logError('util', error))
+
+  await sql.query(`CREATE TABLE IF NOT EXISTS \`errors\` (\`id\` INT NOT NULL AUTO_INCREMENT,
+  \`source\` VARCHAR(64) NOT NULL, \`error\` VARCHAR(512) NOT NULL, \`timestamp\` BIGINT NOT NULL, PRIMARY KEY (\`id\`));`)
+  .catch((error) => logError('util', error))
 
   await sql.query(`SELECT \`id\`, \`guildid\`, \`owner\`, \`prefix\`, \`points_min\`, \`points_max\`,
   \`points_timeout\`, \`twitch_defaultchannel\` FROM \`guilds\``)
@@ -41,7 +45,7 @@ async function start () {
       if (results[i].twitch_defaultchannel) data.data.guilds[results[i].guildid].twitch(results[i].twitch_defaultchannel)
     }
   })
-  .catch((error) => console.log(error))
+  .catch((error) => logError('util', error))
 
   await sql.query(`SELECT \`id\`, \`userid\` FROM \`users\``)
   .then((results) => {
@@ -49,7 +53,7 @@ async function start () {
       data.data.users[results[i].userid] = new User(results[i].id)
     }
   })
-  .catch((error) => console.log(error))
+  .catch((error) => logError('util', error))
 
   await sql.query(`SELECT \`id\`, \`channelid\`, \`guild\` FROM \`channels\``)
   .then((results) => {
@@ -57,7 +61,7 @@ async function start () {
       data.data.channels[results[i].channelid] = new Channel(results[i].id, results[i].guild)
     }
   })
-  .catch((error) => console.log(error))
+  .catch((error) => logError('util', error))
 
   /*
   await sql.query(`SELECT (\`id\`, \`user\`, \`guild\`, \`points\`) FROM \`userguilds\``)
@@ -72,6 +76,12 @@ async function start () {
   index.client.login(config.bot.token)
 }
 
+function logError (source, error) {
+  sql.query(`INSERT INTO \`errors\` VALUES (0, ?, ?, ?)`, [source, error.message, new Date().getTime()])
+  .catch((error) => `Error Writing An Error! \n${error}`)
+}
+
 module.exports = {
-  start: start
+  start: start,
+  logError: logError
 }

@@ -8,12 +8,12 @@ var pool = MySql.createPool({
   password: config.mysql.password
 })
 
-function query (query) {
+function query (query, values = []) {
   return new Promise((resolve, reject) => {
     pool.getConnection((poolError, connection) => {
       if (poolError) reject(poolError)
 
-      connection.query(query, (queryError, results, fields) => {
+      connection.query(query, values, (queryError, results, fields) => {
         connection.release()
 
         if (queryError) reject(queryError)
