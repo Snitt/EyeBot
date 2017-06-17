@@ -7,6 +7,18 @@
   },
 
   "bot": {
-    "token": ""
+    "token": "",
+    "prefix": "!"
+  },
+
+  "points": {
+    "min": 1,
+    "max": 5,
+    "timeout": 30
+  },
+
+  "api": {
+    "google": "AIzaSyByVjGt1qjlmcBRpQfsSEdGnR-SW0GXPKk",
+    "twitch": "cqo16hvoa2lh1s1c292neconhkfw2v"
   }
 }

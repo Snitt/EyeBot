@@ -14,10 +14,9 @@ module.exports = async (client) => {
       for (let guildChannel of newGuild.channels.values()) { await data.checkChannel(guildChannel) }
       for (let guildMember of newGuild.members.values()) { await data.checkUser(guildMember.user) }
 
-      data.data.guilds[newGuild.id].ready(true)
+      data.data.guilds[newGuild.id].ready = true
     } catch (error) {
-      console.log(error)
-      // util.logError('ready', error)
+      util.logError('ready', error)
     }
   }
 }

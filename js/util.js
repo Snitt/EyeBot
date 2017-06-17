@@ -13,7 +13,7 @@ async function start () {
   await sql.query(`CREATE TABLE IF NOT EXISTS \`guilds\` (\`id\` INT NOT NULL AUTO_INCREMENT,
   \`guildid\` VARCHAR(32) NOT NULL, \`owner\` INT NOT NULL, \`prefix\` VARCHAR(16) NOT NULL,
   \`points_min\` INT NOT NULL, \`points_max\` INT NOT NULL, \`points_timeout\` INT NOT NULL,
-  \`twitch_defaultchannel\` VARCHAR(64) NOT NULL, PRIMARY KEY (\`id\`));`)
+  \`twitch_defaultchannel\` VARCHAR(64), PRIMARY KEY (\`id\`));`)
   .catch((error) => logError('util', error))
 
   await sql.query(`CREATE TABLE IF NOT EXISTS \`users\` (\`id\` INT NOT NULL AUTO_INCREMENT,
@@ -85,6 +85,7 @@ function fetchMembers (guild) {
 }
 
 function logError (source, error) {
+  console.log(error)
   console.log(`There was an error in: ${source}\n${error}`)
 
   sql.query(`INSERT INTO \`errors\` VALUES (0, ?, ?, ?)`, [source, error.message, new Date().getTime()])
