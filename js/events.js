@@ -3,8 +3,11 @@ const Guild = require('../Classes/Guild')
 const User = require('../Classes/User')
 // const UserGuild = require('../Classes/UserGuild')
 
-const sql = require('./sql')
+const index = require('../index')
 const data = require('./data')
+const sql = require('./sql')
+
+const config = require('../json/config.json')
 
 async function start () {
   await sql.query(`CREATE TABLE IF NOT EXISTS \`guilds\` (\`id\` INT NOT NULL AUTO_INCREMENT,
@@ -18,28 +21,19 @@ async function start () {
   .catch((error) => console.log(error))
 
   await sql.query(`CREATE TABLE IF NOT EXISTS \`channels\` (\`id\` INT NOT NULL AUTO_INCREMENT,
-  \`channelid\` VARCHAR(32) NOT NULL, \`guild\` INT NOT NULL, PRIMARY KEY (\`id\`))`)
+  \`channelid\` VARCHAR(32) NOT NULL, \`guild\` INT NOT NULL, PRIMARY KEY (\`id\`));`)
   .catch((error) => console.log(error))
 
   await sql.query(`CREATE TABLE IF NOT EXISTS \`userguilds\` (\`id\` INT NOT NULL AUTO_INCREMENT,
-  \`user\` INT NOT NULL, \`guild\` INT NOT NULL, \`points\` INT NOT NULL, PRIMARY KEY (\`id\`))`)
+  \`user\` INT NOT NULL, \`guild\` INT NOT NULL, \`points\` INT NOT NULL, PRIMARY KEY (\`id\`));`)
   .catch((error) => console.log(error))
 
   await sql.query(`CREATE TABLE IF NOT EXISTS \`wordfilter\` (\`id\` INT NOT NULL AUTO_INCREMENT,
-  \`guild\` INT NOT NULL, \`phrase\` VARCHAR(64) NOT NULL, PRIMARY KEY (\`id\`))`)
+  \`guild\` INT NOT NULL, \`phrase\` VARCHAR(64) NOT NULL, PRIMARY KEY (\`id\`));`)
   .catch((error) => console.log(error))
 
-  await sql.query(`SELECT (\`id\`, \`guildid\`, \`owner\`, \`prefix\`, \`points_min\`, \`points_max\`,
-  \`points_timeout\`, \`twitch_defaultchannel\`) FROM \`guilds\``)
-  .then((results) => {
-    for (let i = 0; i < results.length; i++) {
-
-    }
-  })
-  .catch((error) => console.log(error))
-
-  await sql.query(`SELECT (\`id\`, \`guildid\`, \`owner\`, \`prefix\`, \`points_min\`, \`points_max\`,
-  \`points_timeout\`, \`twitch_defaultchannel\`) FROM \`guilds\``)
+  await sql.query(`SELECT \`id\`, \`guildid\`, \`owner\`, \`prefix\`, \`points_min\`, \`points_max\`,
+  \`points_timeout\`, \`twitch_defaultchannel\` FROM \`guilds\``)
   .then((results) => {
     for (let i = 0; i < results.length; i++) {
       data.data.guilds[results[i].guildid] = new Guild(results[i].id, results[i].owner, results[i].prefix, results[i].points_min, results[i].points_max, results[i].points_timeout)
@@ -49,7 +43,7 @@ async function start () {
   })
   .catch((error) => console.log(error))
 
-  await sql.query(`SELECT (\`id\`, \`userid\`) FROM \`users\``)
+  await sql.query(`SELECT \`id\`, \`userid\` FROM \`users\``)
   .then((results) => {
     for (let i = 0; i < results.length; i++) {
       data.data.users[results[i].userid] = new User(results[i].id)
@@ -57,7 +51,7 @@ async function start () {
   })
   .catch((error) => console.log(error))
 
-  await sql.query(`SELECT (\`id\`, \`channelid\`, \`guild\`) FROM \`channels\``)
+  await sql.query(`SELECT \`id\`, \`channelid\`, \`guild\` FROM \`channels\``)
   .then((results) => {
     for (let i = 0; i < results.length; i++) {
       data.data.channels[results[i].channelid] = new Channel(results[i].id, results[i].guild)
@@ -74,6 +68,8 @@ async function start () {
   })
   .catch((error) => console.log(error))
   */
+
+  index.client.login(config.bot.token)
 }
 
 module.exports = {
