@@ -1,8 +1,12 @@
 {
   "mysql": {
     "host": "127.0.0.1",
-    "database": "eye",
-    "user": "test",
-    "password": "test"
+    "database": "eyetester",
+    "user": "eyetester",
+    "password": "lol123"
+  },
+
+  "bot": {
+    "token": ""
   }
 }
