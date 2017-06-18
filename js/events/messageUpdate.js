@@ -29,9 +29,13 @@ module.exports = async (oldMessage, newMessage) => {
       if (isNewAttachment) {
         reply += `**Old Attachment:** `
 
-        await util.shortenUrl(oldMessage.attachments.first().url)
-        .then((url) => { reply += `${url}\n` })
-        .catch((error) => util.logError('messageUpdate', error))
+        await util.imgurUpload(`attachments/${oldMessage.id}.jpg`)
+        .then(async (data) => {
+          await util.shortenUrl(data.data.link)
+          .then((url) => { reply += `${url}\n` })
+          .catch((error) => util.logError('messageDelete', error))
+        })
+        .catch((error) => util.logError('messageDelete', error))
       }
     }
 

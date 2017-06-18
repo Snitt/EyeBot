@@ -19,11 +19,13 @@ module.exports = async (message) => {
 
     reply += `**Attachments:** `
 
-    for (let messageAttachment of message.attachments.values()) {
-      await util.shortenUrl(messageAttachment.url)
-      .then((url) => { reply += `${url} ` })
+    await util.imgurUpload(`attachments/${message.id}.jpg`)
+    .then(async (data) => {
+      await util.shortenUrl(data.data.link)
+      .then((url) => { reply += `${url}\n` })
       .catch((error) => util.logError('messageDelete', error))
-    }
+    })
+    .catch((error) => util.logError('messageDelete', error))
   }
 
   util.trySendBotMessage(message, 'Message **Deleted**', reply)

@@ -10,6 +10,8 @@ const User = require('../Classes/User')
 const index = require('../index')
 const data = require('./data')
 const sql = require('./sql')
+const imgur = require('imgur-node-api')
+imgur.setClientID(config.api.imgur)
 
 async function start () {
   await sql.query(`CREATE TABLE IF NOT EXISTS \`guilds\` (\`id\` INT NOT NULL AUTO_INCREMENT,
@@ -105,6 +107,16 @@ function shortenUrl (string) {
   })
 }
 
+function imgurUpload (string) {
+  return new Promise((resolve, reject) => {
+    imgur.upload(string, (error, data) => {
+      if (error) reject(error)
+
+      resolve(data)
+    })
+  })
+}
+
 function trySendBotMessage (message, header, string) {
   let channel = message.guild.channels.find(channel => channel.name === data.data.guilds[message.guild.id].log)
 
@@ -122,6 +134,7 @@ function trySendBotMessage (message, header, string) {
 module.exports = {
   logError: logError,
   shortenUrl: shortenUrl,
+  imgurUpload: imgurUpload,
   trySendBotMessage: trySendBotMessage,
   start: start,
   fetchMembers: fetchMembers

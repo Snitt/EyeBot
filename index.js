@@ -5,5 +5,7 @@ module.exports = {
   client: client
 }
 
-require('./js/util').start()
+const util = require('./js/util')
+util.start()
+
 require('./js/eventLoader')(client)

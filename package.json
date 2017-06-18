@@ -4,8 +4,11 @@
   "description": "The Eye is being built to be an AIO (All In One) Bot. Whether you are looking for some fun, or looking for Moderation features - I hope The Eye can help you and provide said features.",
   "main": "index.js",
   "dependencies": {
+    "fs": "^0.0.1-security",
+    "imgur-api": "^0.0.1",
     "discord.js": "^11.1.0",
-    "mysql": "^2.13.0"
+    "mysql": "^2.13.0",
+    "snekfetch": "^3.1.11"
   },
   "devDependencies": {},
   "scripts": {
