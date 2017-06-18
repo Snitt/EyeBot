@@ -16,7 +16,7 @@ function query (query, values = []) {
       connection.query(query, values, (queryError, results, fields) => {
         connection.release()
 
-        if (queryError) reject(queryError)
+        if (queryError) { console.log(`Query Failed ${query}`); reject(queryError) }
         resolve(results)
       })
     })

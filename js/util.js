@@ -63,15 +63,13 @@ async function start () {
   })
   .catch((error) => logError('util', error))
 
-  /*
-  await sql.query(`SELECT (\`id\`, \`user\`, \`guild\`, \`points\`) FROM \`userguilds\``)
+  await sql.query(`SELECT \`id\`, \`user\`, \`guild\`, \`points\` FROM \`userguilds\``)
   .then((results) => {
     for (let i = 0; i < results.length; i++) {
-
+      data.data.users[data.dataArray[results[i].user]].setGuilds(data.dataArray[results[i].guild], results[i].id, results[i].points)
     }
   })
-  .catch((error) => console.log(error))
-  */
+  .catch((error) => logError('util', error))
 
   index.client.login(config.bot.token)
 }
@@ -84,16 +82,16 @@ function fetchMembers (guild) {
   })
 }
 
-function logError (source, error) {
+async function logError (source, error) {
   console.log(error)
-  console.log(`There was an error in: ${source}\n${error}`)
+  // console.log(`There was an error in: ${source}\n${error}`)
 
-  sql.query(`INSERT INTO \`errors\` VALUES (0, ?, ?, ?)`, [source, error.message, new Date().getTime()])
+  await sql.query(`INSERT INTO \`errors\` VALUES (0, ?, ?, ?)`, [source, error.message, new Date().getTime()])
   .catch((error) => `Error Writing An Error! \n${error}`)
 }
 
 module.exports = {
+  logError: logError,
   start: start,
-  fetchMembers: fetchMembers,
-  logError: logError
+  fetchMembers: fetchMembers
 }

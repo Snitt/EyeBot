@@ -12,7 +12,10 @@ module.exports = async (client) => {
       await data.checkGuild(newGuild)
 
       for (let guildChannel of newGuild.channels.values()) { await data.checkChannel(guildChannel) }
-      for (let guildMember of newGuild.members.values()) { await data.checkUser(guildMember.user) }
+      for (let guildMember of newGuild.members.values()) {
+        await data.checkUser(guildMember.user)
+        await data.checkUserGuild(guildMember.user, newGuild)
+      }
 
       data.data.guilds[newGuild.id].ready = true
     } catch (error) {
