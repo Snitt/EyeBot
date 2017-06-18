@@ -1,3 +1,5 @@
+const fs = require('fs')
+
 const util = require('../util')
 
 module.exports = async (message) => {
@@ -19,7 +21,7 @@ module.exports = async (message) => {
 
     reply += `**Attachments:** `
 
-    if (fs.stat(`attachments/${message.id}.jpg`, async (error, stat) => {
+    fs.stat(`attachments/${message.id}.jpg`, async (error, stat) => {
       if (error == null) {
         await util.imgurUpload(`attachments/${message.id}.jpg`)
         .then(async (data) => {
