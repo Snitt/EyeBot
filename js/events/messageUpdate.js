@@ -29,13 +29,19 @@ module.exports = async (oldMessage, newMessage) => {
       if (isNewAttachment) {
         reply += `**Old Attachment:** `
 
-        await util.imgurUpload(`attachments/${oldMessage.id}.jpg`)
-        .then(async (data) => {
-          await util.shortenUrl(data.data.link)
-          .then((url) => { reply += `${url}\n` })
-          .catch((error) => util.logError('messageDelete', error))
+        if (fs.stat(`attachments/${oldMessage.id}.jpg`, async (error, stat) => {
+          if (error == null) {
+            await util.imgurUpload(`attachments/${oldMessage.id}.jpg`)
+            .then(async (data) => {
+              await util.shortenUrl(data.data.link)
+              .then((url) => { reply += `${url}\n` })
+              .catch((error) => util.logError('messageDelete', error))
+            })
+            .catch((error) => util.logError('messageDelete', error))
+          } else {
+            reply += `Unavailable`
+          }
         })
-        .catch((error) => util.logError('messageDelete', error))
       }
     }
 

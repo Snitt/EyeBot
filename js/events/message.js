@@ -11,6 +11,12 @@ module.exports = (message) => {
     .then((response) => {
       fs.writeFile(`attachments/${message.id}.jpg`, response.body, (error) => {
         if (error) throw error
+
+        setTimeout(() => {
+          fs.unlink(`attachments/${message.id}.jpg`, (error) => {
+            if (error) throw error
+          })
+        }, 3600000)
       })
     })
     .catch((error) => util.logError('message', error))

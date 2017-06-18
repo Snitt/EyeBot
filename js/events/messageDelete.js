@@ -19,13 +19,19 @@ module.exports = async (message) => {
 
     reply += `**Attachments:** `
 
-    await util.imgurUpload(`attachments/${message.id}.jpg`)
-    .then(async (data) => {
-      await util.shortenUrl(data.data.link)
-      .then((url) => { reply += `${url}\n` })
-      .catch((error) => util.logError('messageDelete', error))
+    if (fs.stat(`attachments/${message.id}.jpg`, async (error, stat) => {
+      if (error == null) {
+        await util.imgurUpload(`attachments/${message.id}.jpg`)
+        .then(async (data) => {
+          await util.shortenUrl(data.data.link)
+          .then((url) => { reply += `${url}\n` })
+          .catch((error) => util.logError('messageDelete', error))
+        })
+        .catch((error) => util.logError('messageDelete', error))
+      } else {
+        reply += `Unavailable`
+      }
     })
-    .catch((error) => util.logError('messageDelete', error))
   }
 
   util.trySendBotMessage(message, 'Message **Deleted**', reply)
