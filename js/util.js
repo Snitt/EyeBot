@@ -25,7 +25,8 @@ async function start () {
   .catch((error) => logError('util', error))
 
   await sql.query(`CREATE TABLE IF NOT EXISTS \`userguilds\` (\`id\` INT NOT NULL AUTO_INCREMENT,
-  \`user\` INT NOT NULL, \`guild\` INT NOT NULL, \`points\` INT NOT NULL, PRIMARY KEY (\`id\`));`)
+  \`user\` INT NOT NULL, \`guild\` INT NOT NULL, \`points\` INT NOT NULL, \`mutes\` INT NOT NULL,
+  \`kicks\` INT NOT NULL, \`bans\` INT NOT NULL, PRIMARY KEY (\`id\`));`)
   .catch((error) => logError('util', error))
 
   await sql.query(`CREATE TABLE IF NOT EXISTS \`wordfilters\` (\`id\` INT NOT NULL AUTO_INCREMENT,
@@ -41,6 +42,7 @@ async function start () {
   .then((results) => {
     for (let i = 0; i < results.length; i++) {
       data.data.guilds[results[i].guildid] = new Guild(results[i].id, results[i].owner, results[i].prefix, results[i].points_min, results[i].points_max, results[i].points_timeout)
+      data.dataArray.guilds[results[i].id] = results[i].guildid
 
       if (results[i].twitch_defaultchannel) { data.data.guilds[results[i].guildid].twitch = results[i].twitch_defaultchannel }
     }
@@ -51,6 +53,7 @@ async function start () {
   .then((results) => {
     for (let i = 0; i < results.length; i++) {
       data.data.users[results[i].userid] = new User(results[i].id)
+      data.dataArray.users[results[i].id] = results[i].userid
     }
   })
   .catch((error) => logError('util', error))
@@ -59,14 +62,15 @@ async function start () {
   .then((results) => {
     for (let i = 0; i < results.length; i++) {
       data.data.channels[results[i].channelid] = new Channel(results[i].id, results[i].guild)
+      data.dataArray.channels[results[i].id] = results[i].channelid
     }
   })
   .catch((error) => logError('util', error))
 
-  await sql.query(`SELECT \`id\`, \`user\`, \`guild\`, \`points\` FROM \`userguilds\``)
+  await sql.query(`SELECT \`id\`, \`user\`, \`guild\`, \`points\`, \`mutes\`, \`kicks\`, \`bans\` FROM \`userguilds\``)
   .then((results) => {
     for (let i = 0; i < results.length; i++) {
-      data.data.users[data.dataArray[results[i].user]].setGuilds(data.dataArray[results[i].guild], results[i].id, results[i].points)
+      data.data.users[data.dataArray.users[results[i].user]].setGuilds(data.dataArray.guilds[results[i].guild], results[i].id, results[i].points, results[i].mutes, results[i].kicks, results[i].bans)
     }
   })
   .catch((error) => logError('util', error))
@@ -83,8 +87,7 @@ function fetchMembers (guild) {
 }
 
 async function logError (source, error) {
-  console.log(error)
-  // console.log(`There was an error in: ${source}\n${error}`)
+  console.log(`There was an error in: ${source}\n${error}`)
 
   await sql.query(`INSERT INTO \`errors\` VALUES (0, ?, ?, ?)`, [source, error.message, new Date().getTime()])
   .catch((error) => `Error Writing An Error! \n${error}`)

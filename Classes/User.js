@@ -4,8 +4,8 @@ class User {
     this.guilds = { }
   }
 
-  setGuilds (guildid, id, points) {
-    this.guilds[guildid] = { id: id, points: points }
+  setGuilds (guildid, id, points, mutes, kicks, bans) {
+    this.guilds[guildid] = { id: id, points: points, mutes: mutes, kicks: kicks, bans: bans }
   }
 }
 
