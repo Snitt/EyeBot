@@ -44,9 +44,9 @@ async function checkUser (user) {
 
 async function checkUserGuild (user, guild) {
   if (data.users[user.id].guilds[guild.id] == null) {
-    await sql.query(`INSERT INTO \`userguilds\` VALUES (0, ?, ?, 0, 0, 0, 0)`, [data.users[user.id].id, data.guilds[guild.id].id])
+    await sql.query(`INSERT INTO \`userguilds\` VALUES (0, ?, ?, 0, 0, 0, 0, 0)`, [data.users[user.id].id, data.guilds[guild.id].id])
     .then((results) => {
-      data.users[user.id].setGuilds(data.guilds[guild.id].id, results.insertId, 0, 0, 0, 0)
+      data.users[user.id].setGuilds(data.guilds[guild.id].id, results.insertId, 0, 0, 0, 0, 0)
     })
     .catch((error) => util.logError('data', error))
   }

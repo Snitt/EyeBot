@@ -2,7 +2,7 @@ const util = require('../util')
 const data = require('../data')
 
 module.exports = async (client) => {
-  client.user.setGame(`!help | @${client.user.tag} help | DM "help"`)
+  // client.user.setGame(`!help | @${client.user.tag} help | DM "help"`)
 
   for (let guild of client.guilds.values()) {
     try {

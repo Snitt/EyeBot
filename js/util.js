@@ -27,8 +27,8 @@ async function start () {
   .catch((error) => logError('util', error))
 
   await sql.query(`CREATE TABLE IF NOT EXISTS \`userguilds\` (\`id\` INT NOT NULL AUTO_INCREMENT,
-  \`user\` INT NOT NULL, \`guild\` INT NOT NULL, \`points\` INT NOT NULL, \`mutes\` INT NOT NULL,
-  \`kicks\` INT NOT NULL, \`bans\` INT NOT NULL, PRIMARY KEY (\`id\`));`)
+  \`user\` INT NOT NULL, \`guild\` INT NOT NULL, \`points\` INT NOT NULL, \`warns\` INT NOT NULL,
+  \`mutes\` INT NOT NULL, \`kicks\` INT NOT NULL, \`bans\` INT NOT NULL, PRIMARY KEY (\`id\`));`)
   .catch((error) => logError('util', error))
 
   await sql.query(`CREATE TABLE IF NOT EXISTS \`wordfilters\` (\`id\` INT NOT NULL AUTO_INCREMENT,
@@ -69,10 +69,10 @@ async function start () {
   })
   .catch((error) => logError('util', error))
 
-  await sql.query(`SELECT \`id\`, \`user\`, \`guild\`, \`points\`, \`mutes\`, \`kicks\`, \`bans\` FROM \`userguilds\``)
+  await sql.query(`SELECT \`id\`, \`user\`, \`guild\`, \`points\`, \`warns\`, \`mutes\`, \`kicks\`, \`bans\` FROM \`userguilds\``)
   .then((results) => {
     for (let i = 0; i < results.length; i++) {
-      data.data.users[data.dataArray.users[results[i].user]].setGuilds(data.dataArray.guilds[results[i].guild], results[i].id, results[i].points, results[i].mutes, results[i].kicks, results[i].bans)
+      data.data.users[data.dataArray.users[results[i].user]].setGuilds(data.dataArray.guilds[results[i].guild], results[i].id, results[i].points, results[i].warns, results[i].mutes, results[i].kicks, results[i].bans)
     }
   })
   .catch((error) => logError('util', error))
