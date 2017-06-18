@@ -108,7 +108,7 @@ function shortenUrl (string) {
 function trySendBotMessage (message, header, string) {
   let channel = message.guild.channels.find(channel => channel.name === data.data.guilds[message.guild.id].log)
 
-  if (channel) {
+  if (channel && channel.permissionsFor(message.guild.member(index.client.user)).has('SEND_MESSAGES')) {
     let embed = new Discord.RichEmbed()
     .setAuthor(message.author.tag, message.author.avatarURL)
     .setDescription(`${header} In: **#${message.channel.name}**\n\n${string}`)

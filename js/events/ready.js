@@ -2,7 +2,7 @@ const util = require('../util')
 const data = require('../data')
 
 module.exports = async (client) => {
-  // client.user.setGame(`!help | @${client.user.tag} help | DM "help"`)
+  client.user.setGame(`github.com/OSCAR-WOS/EyeBot/tree/ESLint_rewrite`)
 
   for (let guild of client.guilds.values()) {
     try {
