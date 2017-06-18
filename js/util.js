@@ -1,3 +1,7 @@
+const Snekfetch = require('snekfetch')
+const Discord = require('discord.js')
+const config = require('../json/config.json')
+
 const Channel = require('../Classes/Channel')
 const Guild = require('../Classes/Guild')
 const User = require('../Classes/User')
@@ -7,13 +11,11 @@ const index = require('../index')
 const data = require('./data')
 const sql = require('./sql')
 
-const config = require('../json/config.json')
-
 async function start () {
   await sql.query(`CREATE TABLE IF NOT EXISTS \`guilds\` (\`id\` INT NOT NULL AUTO_INCREMENT,
   \`guildid\` VARCHAR(32) NOT NULL, \`owner\` INT NOT NULL, \`prefix\` VARCHAR(16) NOT NULL,
   \`points_min\` INT NOT NULL, \`points_max\` INT NOT NULL, \`points_timeout\` INT NOT NULL,
-  \`twitch_defaultchannel\` VARCHAR(64), PRIMARY KEY (\`id\`));`)
+  \`log\` VARCHAR(64), \`twitch_defaultchannel\` VARCHAR(64), PRIMARY KEY (\`id\`));`)
   .catch((error) => logError('util', error))
 
   await sql.query(`CREATE TABLE IF NOT EXISTS \`users\` (\`id\` INT NOT NULL AUTO_INCREMENT,
@@ -38,10 +40,10 @@ async function start () {
   .catch((error) => logError('util', error))
 
   await sql.query(`SELECT \`id\`, \`guildid\`, \`owner\`, \`prefix\`, \`points_min\`, \`points_max\`,
-  \`points_timeout\`, \`twitch_defaultchannel\` FROM \`guilds\``)
+  \`points_timeout\`, \`log\`, \`twitch_defaultchannel\` FROM \`guilds\``)
   .then((results) => {
     for (let i = 0; i < results.length; i++) {
-      data.data.guilds[results[i].guildid] = new Guild(results[i].id, results[i].owner, results[i].prefix, results[i].points_min, results[i].points_max, results[i].points_timeout)
+      data.data.guilds[results[i].guildid] = new Guild(results[i].id, results[i].owner, results[i].prefix, results[i].points_min, results[i].points_max, results[i].points_timeout, results[i].log)
       data.dataArray.guilds[results[i].id] = results[i].guildid
 
       if (results[i].twitch_defaultchannel) { data.data.guilds[results[i].guildid].twitch = results[i].twitch_defaultchannel }
@@ -78,6 +80,13 @@ async function start () {
   index.client.login(config.bot.token)
 }
 
+async function logError (source, error) {
+  console.log(`There was an error in: ${source}\n${error}`)
+
+  await sql.query(`INSERT INTO \`errors\` VALUES (0, ?, ?, ?)`, [source, error.message, new Date().getTime()])
+  .catch((error) => `Error Writing An Error! \n${error}`)
+}
+
 function fetchMembers (guild) {
   return new Promise((resolve, reject) => {
     guild.fetchMembers()
@@ -86,15 +95,34 @@ function fetchMembers (guild) {
   })
 }
 
-async function logError (source, error) {
-  console.log(`There was an error in: ${source}\n${error}`)
+function shortenUrl (string) {
+  return new Promise((resolve, reject) => {
+    Snekfetch.post(`https://www.googleapis.com/urlshortener/v1/url?key=${config.api.google}`)
+    .set('Content-Type', 'application/json')
+    .send({'longUrl': string})
+    .then((response) => resolve(response.body.id))
+    .catch((response) => reject(response))
+  })
+}
 
-  await sql.query(`INSERT INTO \`errors\` VALUES (0, ?, ?, ?)`, [source, error.message, new Date().getTime()])
-  .catch((error) => `Error Writing An Error! \n${error}`)
+function trySendBotMessage (message, header, string) {
+  let channel = message.guild.channels.find(channel => channel.name === data.data.guilds[message.guild.id].log)
+
+  if (channel) {
+    let embed = new Discord.RichEmbed()
+    .setAuthor(message.author.tag, message.author.avatarURL)
+    .setDescription(`${header} In: **#${message.channel.name}**\n\n${string}`)
+    .setFooter(`ID: ${message.id}`)
+    .setTimestamp()
+
+    channel.send({embed})
+  }
 }
 
 module.exports = {
   logError: logError,
+  shortenUrl: shortenUrl,
+  trySendBotMessage: trySendBotMessage,
   start: start,
   fetchMembers: fetchMembers
 }

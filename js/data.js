@@ -22,9 +22,9 @@ async function checkChannel (channel) {
 
 async function checkGuild (guild) {
   if (data.guilds[guild.id] == null) {
-    await sql.query(`INSERT INTO \`guilds\` VALUES (0, ?, ?, ?, ?, ?, ?, 'NULL')`, [guild.id, data.users[guild.owner.id].id, config.bot.prefix, config.points.min, config.points.max, config.points.timeout])
+    await sql.query(`INSERT INTO \`guilds\` VALUES (0, ?, ?, ?, ?, ?, ?, ?, 'NULL')`, [guild.id, data.users[guild.owner.id].id, config.bot.prefix, config.points.min, config.points.max, config.points.timeout, config.bot.log])
     .then((results) => {
-      data.guilds[guild.id] = new Guild(results.insertId, data.users[guild.owner.id].id, config.bot.prefix, config.points.min, config.points.max, config.points.timeout)
+      data.guilds[guild.id] = new Guild(results.insertId, data.users[guild.owner.id].id, config.bot.prefix, config.points.min, config.points.max, config.points.timeout, config.bot.log)
       dataArray.guilds[results.insertId] = guild.id
     })
     .catch((error) => util.logError('data', error))

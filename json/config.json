@@ -8,7 +8,8 @@
 
   "bot": {
     "token": "",
-    "prefix": "!"
+    "prefix": "!",
+    "log": "eye"
   },
 
   "points": {

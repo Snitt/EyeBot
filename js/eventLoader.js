@@ -8,5 +8,8 @@ module.exports = (client) => {
   client.on('guildMemberAdd', requestEvent('guildMemberAdd'))
 
   client.on('disconnect', requestEvent('disconnect'))
+
   client.on('message', requestEvent('message'))
+  client.on('messageUpdate', requestEvent('messageUpdate'))
+  client.on('messageDelete', requestEvent('messageDelete'))
 }
